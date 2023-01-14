@@ -105,3 +105,5 @@ dist
 
 # PyCharm files
 .idea
+
+secrets.txt
