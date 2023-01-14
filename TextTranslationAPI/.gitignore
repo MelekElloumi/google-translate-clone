@@ -105,4 +105,5 @@ dist
 
 # PyCharm files
 .idea
-ChatGPT_DevOps.md
+
+secrets.txt

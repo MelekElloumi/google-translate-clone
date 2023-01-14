@@ -48,15 +48,29 @@ const Convert=({options})=>{
     useEffect(()=>{
         
         const doTranslation=async()=>{
-            const {data}=await axios.post('https://translation.googleapis.com/language/translate/v2',{},{
-                params:{
-                    q:debouncedText,
+            /*const {data}=await fetch('http://127.0.0.1:5001/translate', {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                mode:'cors',
+                body:JSON.stringify( {
+                    text:debouncedText,
                     target:outLang.value,
                     source:inLang.value,
-                    key: "AIzaSyCHUCmpR7cT_yDFHC98CZJy2LTms-IwDlM"
+                })
+          
+              })*/
+            const {data}=await axios.post('http://127.0.0.1:5001/translate',{
+                text:debouncedText,
+                target:outLang.value,
+                source:inLang.value,
+            }/*,{
+                params:{
+                    text:debouncedText,
+                    target:outLang.value,
+                    source:inLang.value,
                 }
-            });
-            dispatch(outputText(data.data.translations[0].translatedText));
+            }*/);
+            dispatch(outputText(data.translatedtext));
         };
         doTranslation();
     },[debouncedText, inLang,outLang]);
