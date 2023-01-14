@@ -23,16 +23,13 @@ const Convert=({options})=>{
 
     useEffect(()=>{
         const doDetection=async()=>{
-            const {data}=await axios.post('https://translation.googleapis.com/language/translate/v2/detect',{},{
-                params: {
-                    q:debouncedText,
-                    key: "AIzaSyCHUCmpR7cT_yDFHC98CZJy2LTms-IwDlM"
-                }
+            const {data}=await axios.post('http://127.0.0.1:5001/detect',{
+                    text:debouncedText,
             });
-            if(inLang.value!==data.data.detections[0][0].language && debouncedText!==""){
+            if(inLang.value!==data.language && debouncedText!==""){
                 document.getElementById("suggestion").style.display="block";
                 options.forEach(option => {
-                    if(option.value===data.data.detections[0][0].language){
+                    if(option.value===data.language){
                         dispatch(detectLang(option));
                     }
                 });

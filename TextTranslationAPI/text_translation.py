@@ -30,6 +30,22 @@ def create_app(name):
         # Return the translation in the response
         return jsonify({"translatedtext": result.text})
 
+    @app.route("/detect", methods=["POST"])
+    def detect():
+        # Get the request info
+        if not request.json:
+            return jsonify({"language": ""})
+        if not request.json["text"]:
+            return jsonify({"language": ""})
+        text = request.json["text"]
+        print("Detecting:", text)
+        # Translate the text
+        result = translator.detect(text)
+
+        print("Result detection:", result.lang)
+        # Return the translation in the response
+        return jsonify({"language": result.lang})
+
     return app
 
 
