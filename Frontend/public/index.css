@@ -1,0 +1,282 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    position: relative;
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+#message {
+    position: absolute;
+    background: rgb(45, 42, 42);
+    color: white;
+}
+
+
+select::-ms-expand {
+    display: none;
+}
+
+.drop-item:hover {
+    background: #c1c1c1;
+}
+
+.inp textarea {
+    border: none
+}
+
+.inp,
+.out {
+    border-top: 1px solid #dddddd;
+}
+
+.inp {
+    border-right: 1px solid #dddddd;
+}
+
+.inp textarea,
+#out {
+    padding: 0;
+    width: 100%;
+    height: 120px;
+    margin: 0;
+    justify-content: start;
+    display: block;
+}
+
+.selection {
+    border: none !important;
+}
+
+.voice, .switch-button{
+    width: 45px;
+    height: 45px;
+}
+
+.voice:hover {
+    background-color: #f5f5f5;
+    border-radius: 50%;
+}
+
+.voice i {
+    font-size: 20px;
+}
+
+#suggestion {
+    font-size: 20px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.fa-solid,
+#detect {
+    color: #1a68d2;
+}
+
+.d-none {
+    display: none;
+}
+
+.d-block {
+    display: block;
+}
+
+.list-element {
+    cursor: pointer;
+}
+
+.list-element:hover {
+    background-color: #f5f5f5;
+}
+
+.selected-lang,
+.selected-lang:hover {
+    transition: all 0.3s !important;
+    color:#1A73E8;
+    border-bottom: 2px solid #1A73E8;
+    margin-bottom: 1px;
+}
+
+.selected-lang:hover {
+    background-color: #f6faff;
+    color: #1A73E8;
+}
+
+.gray-button {
+    border-radius: 50% !important;
+}
+
+.gray-button i {
+    font-size: 17px;
+}
+
+.gray-button:hover, .switch-button:hover {
+    background: #f5f5f5!important;
+}
+
+.switch-button {
+    position: absolute;
+    font-size: 15px!important;
+    left: 50%;
+    top: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    border-radius: 50%!important; 
+}
+
+.btn:focus{
+    outline: none!important;
+    box-shadow: none !important;
+}
+
+.translate-bt{
+    display: flex;
+    justify-content: space-around;
+}
+
+.bg-darker button:hover{
+    background: #e3e2e2!important;
+}
+
+.pp-big{
+    /* margin: auto; */
+    border-radius: 50%;
+    justify-content: center;
+}
+
+.pp-big img{
+    display: block;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid #f5f5f5;
+}
+
+
+.pp, .berry{
+    background-color: white;
+    border-radius: 50%!important;
+    width: 45px;
+    height: 45px;
+    position: relative;
+}
+
+.pp img{
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.pp:hover, .berry:hover{    
+    background: #f5f5f5;
+}
+
+#sidebar{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 310px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: 1px 1px 15px rgb(160, 160, 160);
+    z-index: 101;
+    animation: sidebar 0.3s ease;
+}
+
+#sidebar ul{
+    width: 100%;
+}
+
+#sidebar ul li{
+    cursor: pointer;
+    position: relative;
+    height: 50px;
+}
+
+#sidebar ul li a{
+    float: left;
+    margin-left: 50px;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+#sidebar ul li:hover{
+    background: #f5f5f5;
+}
+
+.profile-info{
+    position: absolute;
+    width: 400px;
+    height: 450px;
+    background-color: white;
+    /* border: 1px solid black; */
+    border-radius: 10px;
+    box-shadow: 0 0 7px rgb(176, 175, 175);
+    top: 70px;
+    right: 10px;
+    z-index: 101;
+}
+
+.profile-info ul li{
+    list-style: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.add-account{
+    width: 100%;
+}
+
+.add-account button{
+    width: 100%;
+    border-top: 1px solid #cfcdcd;
+    border-bottom: 1px solid #cfcdcd;
+    border-radius: 0;
+}
+
+.add-account:hover, .manage:hover, .terms button:hover{
+    background: #f5f5f5;
+}
+
+.manage{
+    border-radius: 20px;
+    border: 1px solid #cfcdcd;
+}
+
+.manage button{
+    font-size: 17px;
+}
+
+.logout{
+    border: 1px solid #cfcdcd;
+    border-radius: 5px;
+}
+
+.logout:hover{
+    background-color: #f5f5f5;
+}
+
+.terms button{
+    margin: 5px;
+    padding: 2px 5px!important;
+}
+
+
+@keyframes sidebar {
+    from {left: -310px;}
+    to {left: 0;}
+}
+
