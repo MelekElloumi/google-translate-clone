@@ -10,6 +10,11 @@ from ratelimit import limits
 from werkzeug.exceptions import HTTPException
 import psutil
 import time
+import logging.config
+from flask_request_id_header.middleware import RequestID
+
+logger = logging.getLogger("Text_Translation_API")
+logging.config.fileConfig('logging.ini', disable_existing_loggers=False)
 
 CONFIG_FILE = "config.json"
 prom_metrics={}
@@ -24,14 +29,11 @@ prom_metrics['trasnlation_memory_usage_bytes'] = Gauge("trasnlation_memory_usage
 prom_metrics['translation_cpu_usage_percent'] = Gauge("translation_cpu_usage_percent", "CPU usage percent.")
 
 
-
-def stop_timer(endpoint):
-    resp_time = time.time()
-    prom_metrics['translation_latency_seconds'].labels(endpoint=endpoint).observe(resp_time)
-
 def create_app(name):
     app = Flask(name)
     CORS(app)
+    app.config['REQUEST_ID_UNIQUE_VALUE_PREFIX'] = ''
+    RequestID(app)
     translator = Translator()
 
     @app.before_request
@@ -45,6 +47,8 @@ def create_app(name):
     @app.errorhandler(HTTPException)
     def handle_errors(e):
         prom_metrics['translation_http_requests_total'].labels(endpoint='error', result='Fail').inc()
+        logger.exception("Recieved bad http call",extra={"app": "flask","request_id":request.environ.get("HTTP_X_REQUEST_ID"),
+                                                         "client_ip":request.remote_addr,"exception":e})
         return Response(
             str(e),
             status=400,
@@ -56,17 +60,27 @@ def create_app(name):
         # Get the request info
         if not request.json:
             prom_metrics['translation_http_requests_total'].labels(endpoint='translate', result='Empty').inc()
+            logger.warning("Empty translation request", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
+                                                               "client_ip": request.remote_addr,
+                                                               "endpoint": "translate"})
             return jsonify({"translatedtext": ""})
         if not request.json["text"]:
             prom_metrics['translation_http_requests_total'].labels(endpoint='translate', result='Empty').inc()
+            logger.warning("Empty translation request", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
+                                                               "client_ip": request.remote_addr,
+                                                               "endpoint": "translate"})
             return jsonify({"translatedtext": ""})
         text = request.json["text"]
         source = request.json["source"]
         target = request.json["target"]
-        print("Input:", text, target, source)
+        logger.info("Translation request received", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
+                                               "client_ip":request.remote_addr,
+                                               "endpoint":"translate","text":text,"target":target,"source":source})
         # Translate the text
         result = translator.translate(text, dest=target, src=source)
-        print("Result:", result.text)
+        logger.info("Translation done", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
+                                               "client_ip":request.remote_addr,"endpoint":"translate",
+                                               "result": result.text})
         if source=="en":
             prom_metrics['translation_english_total'].labels(origin="Source").inc()
         if target=="en":
@@ -82,15 +96,26 @@ def create_app(name):
         # Get the request info
         if not request.json:
             prom_metrics['translation_http_requests_total'].labels(endpoint='detect', result='Empty').inc()
+            logger.warning("Empty translation request", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
+                                                               "client_ip": request.remote_addr,
+                                                               "endpoint": "detect"})
             return jsonify({"language": ""})
         if not request.json["text"]:
             prom_metrics['translation_http_requests_total'].labels(endpoint='detect', result='Empty').inc()
+            logger.warning("Empty translation request", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
+                                                               "client_ip": request.remote_addr,
+                                                               "endpoint": "detect"})
             return jsonify({"language": ""})
         text = request.json["text"]
         print("Detecting:", text)
+        logger.info("Detection request received", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
+                                                           "client_ip": request.remote_addr,
+                                                           "endpoint": "detect", "text": text})
         # Detect the language
         result = translator.detect(text)
-
+        logger.info("Detection done", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
+                                               "client_ip": request.remote_addr, "endpoint": "detection",
+                                               "result": result.lang})
         print("Result detection:", result.lang)
         prom_metrics['translation_http_requests_total'].labels(endpoint='detect', result='Success').inc()
         after_request("detect")
@@ -110,16 +135,18 @@ def create_app(name):
 
 
 def main(production):
+    logger.info("API started", extra={"app": "main"})
     app = create_app("Text_Translation_API")
     SECRET_KEY = os.urandom(24)
     app.secret_key = SECRET_KEY
     f = open("secrets.txt", "w")
     f.write("Text translation app secret key: " + str(SECRET_KEY))
     f.close()
+    logger.info("API served", extra={"app": "main"})
     if production:
         serve(app, host="127.0.0.1", port=8081)
     else:
-        app.run(port=5001)
+        app.run(port=6001)
 
 
 if __name__ == '__main__':
@@ -128,5 +155,5 @@ if __name__ == '__main__':
             config = json.load(config_file)
             production = config['PROD'] == "True"
     except:
-        print("No config file found")
+        logger.exception("No config file", extra={"app": "main"})
     main(production)

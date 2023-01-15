@@ -6,3 +6,5 @@ prometheus-client
 ratelimit
 werkzeug
 psutil
+python-json-logger
+flask-request-id-header

@@ -23,7 +23,7 @@ const Convert=({options})=>{
 
     useEffect(()=>{
         const doDetection=async()=>{
-            const {data}=await axios.post('http://127.0.0.1:5001/detect',{
+            const {data}=await axios.post('http://127.0.0.1:6001/detect',{
                     text:debouncedText,
             });
             if(inLang.value!==data.language && debouncedText!==""){
@@ -56,7 +56,7 @@ const Convert=({options})=>{
                 })
           
               })*/
-            const {data}=await axios.post('http://127.0.0.1:5001/translate',{
+            const {data}=await axios.post('http://127.0.0.1:6001/translate',{
                 text:debouncedText,
                 target:outLang.value,
                 source:inLang.value,
