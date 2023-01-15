@@ -2,3 +2,7 @@ flask
 flask-cors
 waitress
 googletrans==4.0.0-rc1
+prometheus-client
+ratelimit
+werkzeug
+psutil
