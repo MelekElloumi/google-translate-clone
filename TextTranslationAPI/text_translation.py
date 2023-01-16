@@ -144,7 +144,7 @@ def main(production):
     f.close()
     logger.info("API served", extra={"app": "main"})
     if production:
-        serve(app, host="127.0.0.1", port=8081)
+        serve(app, host="0.0.0.0", port=8081)
     else:
         app.run(port=6001)
 

@@ -1,0 +1,8 @@
+Dockerfile
+.dockerignore
+.git*
+__pycache__
+README.md
+*.log
+secrets.txt
+/temp_audio
