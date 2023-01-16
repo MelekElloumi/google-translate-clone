@@ -4,7 +4,7 @@ on:
     paths:
       - "Frontend/**"
 jobs:
-  Build:
+  Build frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,6 +18,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./Frontend
-          file: Frontend/dockerfile
+          file: ./Frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/gtc_frontend:latest
