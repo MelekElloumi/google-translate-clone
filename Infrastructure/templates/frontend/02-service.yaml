@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: gtc-frontend-service
+spec:
+ selector:
+  app: gtc-frontend
+ ports:
+ - name: gtc-frontend-port
+   port: 80
+   protocol: TCP
+   targetPort: 3000
+   #port: {{.Values.http.ttport}}
+   #targetPort: {{.Values.http.ttport}}

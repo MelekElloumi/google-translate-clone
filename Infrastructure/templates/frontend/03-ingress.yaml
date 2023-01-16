@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gtc-frontend
+  labels:
+    name: gtc-frontend
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: gtc-frontend-service
+              port:
+                number: 3000
+                #number: {{.Values.http.ttport}}

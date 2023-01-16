@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: tts-api-service
+spec:
+ selector:
+  app: tts-api
+ ports:
+ - name: tts-api-port
+   port: 8082
+   targetPort: 8082
+   #port: {{.Values.http.ttport}}
+   #targetPort: {{.Values.http.ttport}}

@@ -16,7 +16,6 @@ from flask_request_id_header.middleware import RequestID
 logger = logging.getLogger("Text_Translation_API")
 logging.config.fileConfig('logging.ini', disable_existing_loggers=False)
 
-CONFIG_FILE = "config.json"
 prom_metrics={}
 prom_metrics['translation_http_requests_total'] = Counter("translation_http_requests_total",
                                           "Number of received requests for translation api",
@@ -54,7 +53,7 @@ def create_app(name):
             status=400,
         )
 
-    @app.route("/translate", methods=["POST"])
+    @app.route("/api/translate", methods=["POST"])
     @limits(calls=10, period=1)
     def translate():
         # Get the request info
@@ -90,7 +89,7 @@ def create_app(name):
         # Return the translation in the response
         return jsonify({"translatedtext": result.text})
 
-    @app.route("/detect", methods=["POST"])
+    @app.route("/api/detect", methods=["POST"])
     @limits(calls=10, period=1)
     def detect():
         # Get the request info
@@ -134,7 +133,7 @@ def create_app(name):
     return app
 
 
-def main(production):
+def main():
     logger.info("API started", extra={"app": "main"})
     app = create_app("Text_Translation_API")
     SECRET_KEY = os.urandom(24)
@@ -143,17 +142,9 @@ def main(production):
     f.write("Text translation app secret key: " + str(SECRET_KEY))
     f.close()
     logger.info("API served", extra={"app": "main"})
-    if production:
-        serve(app, host="0.0.0.0", port=8081)
-    else:
-        app.run(port=6001)
+    serve(app, host="0.0.0.0", port=8081)
+
 
 
 if __name__ == '__main__':
-    try:
-        with open(CONFIG_FILE) as config_file:
-            config = json.load(config_file)
-            production = config['PROD'] == "True"
-    except:
-        logger.exception("No config file", extra={"app": "main"})
-    main(production)
+    main()

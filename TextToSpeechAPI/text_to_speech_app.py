@@ -13,10 +13,10 @@ import psutil
 import time
 import logging.config
 from flask_request_id_header.middleware import RequestID
+import traceback
 
 logger = logging.getLogger("Text_To_Speech_API")
 logging.config.fileConfig('logging.ini', disable_existing_loggers=False)
-CONFIG_FILE="config.json"
 
 prom_metrics={}
 prom_metrics['tts_http_requests_total'] = Counter("tts_http_requests_total",
@@ -54,33 +54,38 @@ def create_app(name):
             status=400,
         )
 
-    @app.route('/tts', methods=['GET'])
+    @app.route('/api2/tts', methods=['GET'])
     @limits(calls=10, period=1)
     def textToSpeech():
-        text=request.args.get('text')
-        language=request.args.get('language')
-        if not text or not language:
-            prom_metrics['tts_http_requests_total'].labels(endpoint='textToSpeech', result='Empty').inc()
-            logger.warning("Empty tts request", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
-                                                               "client_ip": request.remote_addr,
-                                                               "endpoint": "textToSpeech"})
-            return Response(status=204)
-        logger.info("TextToSpeech request received", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
-                                                         "client_ip": request.remote_addr,
-                                                         "endpoint": "textToSpeech", "text": text,"language":language})
-        tts = gTTS(text=text, lang=language)
-        logger.info("Speech Generation done", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
-                                             "client_ip": request.remote_addr, "endpoint": "textToSpeech"})
-        if language=="en":
-            prom_metrics['tts_english_total'].inc()
-        tts.save("temp_audio/tts.mp3")
-        prom_metrics['tts_http_requests_total'].labels(endpoint='textToSpeech', result='Success').inc()
-        after_request("textToSpeech")
-        with open("temp_audio/tts.mp3", 'rb') as bites:
-            return send_file(
-                io.BytesIO(bites.read()),
-                attachment_filename='tts.mp3',
-                mimetype='audio/mp3'
+        try:
+            text=request.args.get('text')
+            language=request.args.get('language')
+            if not text or not language:
+                prom_metrics['tts_http_requests_total'].labels(endpoint='textToSpeech', result='Empty').inc()
+                logger.warning("Empty tts request", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
+                                                                   "client_ip": request.remote_addr,
+                                                                   "endpoint": "textToSpeech"})
+                return Response(status=204)
+            logger.info("TextToSpeech request received", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
+                                                             "client_ip": request.remote_addr,
+                                                             "endpoint": "textToSpeech", "text": text,"language":language})
+            tts = gTTS(text=text, lang=language)
+            logger.info("Speech Generation done", extra={"request_id": request.environ.get("HTTP_X_REQUEST_ID"),
+                                                 "client_ip": request.remote_addr, "endpoint": "textToSpeech"})
+            if language=="en":
+                prom_metrics['tts_english_total'].inc()
+            tts.save("tts.mp3")
+            prom_metrics['tts_http_requests_total'].labels(endpoint='textToSpeech', result='Success').inc()
+            after_request("textToSpeech")
+            with open("tts.mp3", 'rb') as bites:
+                return send_file(
+                    io.BytesIO(bites.read()),
+                    mimetype='audio/mp3'
+                )
+        except Exception:
+            return Response(
+                str(traceback.format_exc()),
+                status=400,
             )
 
     @app.route("/metrics")
@@ -96,7 +101,7 @@ def create_app(name):
 
 
 
-def main(production):
+def main():
     app = create_app("Text_To_Speech_API")
     logger.info("API started", extra={"app": "main"})
     SECRET_KEY = os.urandom(24)
@@ -105,17 +110,9 @@ def main(production):
     f.write("Text to Speech app secret key: " + str(SECRET_KEY))
     f.close()
     logger.info("API served", extra={"app": "main"})
-    if production:
-        serve(app, host="0.0.0.0", port=8080)
-    else:
-        app.run(port=6000)
+    serve(app, host="0.0.0.0", port=8082)
+
 
 
 if __name__ == '__main__':
-    try:
-        with open(CONFIG_FILE) as config_file:
-            config = json.load(config_file)
-            production=config['PROD']=="True"
-    except:
-        print("No config file found")
-    main(production)
+    main()

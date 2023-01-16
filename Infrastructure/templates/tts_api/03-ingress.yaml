@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tts-api
+  labels:
+    name: tts-api
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+        - pathType: Prefix
+          path: "/api2"
+          backend:
+            service:
+              name: tts-api-service
+              port:
+                number: 8082
+                #number: {{.Values.http.ttport}}

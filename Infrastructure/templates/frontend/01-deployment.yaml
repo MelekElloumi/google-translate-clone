@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment # type of resource
+metadata:
+  name: gtc-frontend
+  labels:
+    app: gtc-frontend
+    env: production
+spec:
+  #replicas: {{.Values.deployment.replicas}}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gtc-frontend
+  template:
+    metadata:
+      #annotations:
+        #prometheus.io/port: "5000"
+        #prometheus.io/path: "/metrics"
+        #prometheus.io/scrape: "true"
+      labels:
+        app: gtc-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: melekelloumi/gtc_frontend:latest
+          #image: {{.Values.image.ttapi}}
+          imagePullPolicy: Always
+          resources:
+          ports:
+            #- containerPort: {{.Values.http.ttport}}
+            - containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+      restartPolicy: Always
