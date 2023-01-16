@@ -13,10 +13,6 @@ spec:
       app: gtc-frontend
   template:
     metadata:
-      #annotations:
-        #prometheus.io/port: "5000"
-        #prometheus.io/path: "/metrics"
-        #prometheus.io/scrape: "true"
       labels:
         app: gtc-frontend
     spec:
