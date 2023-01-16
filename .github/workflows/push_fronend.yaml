@@ -4,7 +4,7 @@ on:
     paths:
       - "Frontend/**"
 jobs:
-  Build frontend:
+  Build_frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
