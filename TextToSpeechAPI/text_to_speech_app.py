@@ -2,7 +2,6 @@ from flask import Flask, request, send_file, Response, g
 from flask_cors import CORS
 from waitress import serve
 import os
-import json
 from gtts import gTTS
 import io
 import prometheus_client

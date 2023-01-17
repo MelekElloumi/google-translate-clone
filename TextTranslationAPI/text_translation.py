@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request, Response, g
 from flask_cors import CORS
 from waitress import serve
 import os
-import json
 from googletrans import Translator
 import prometheus_client
 from prometheus_client import Counter, Histogram, Gauge
