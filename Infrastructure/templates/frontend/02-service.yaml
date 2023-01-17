@@ -7,8 +7,6 @@ spec:
   app: gtc-frontend
  ports:
  - name: gtc-frontend-port
-   port: 80
    protocol: TCP
-   targetPort: 3000
-   #port: {{.Values.http.ttport}}
-   #targetPort: {{.Values.http.ttport}}
+   port: {{.Values.http.frontendport}}
+   targetPort: {{.Values.http.frontendporttarget}}

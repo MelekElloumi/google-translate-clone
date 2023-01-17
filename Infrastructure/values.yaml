@@ -1,0 +1,18 @@
+replicaCountFront: 1
+replicaCountApi: 2
+
+image:
+  tag: latest
+  ttapi: melekelloumi/text_translation_api:latest
+  ttsapi: melekelloumi/text_to_speech_api:latest
+  frontend: melekelloumi/gtc_frontend:latest
+
+http:
+  ttport: 8081
+  ttsport: 8082
+  frontendport: 80
+  frontendporttarget: 3000
+
+labels:
+  app: gtc-frontend
+  env: production

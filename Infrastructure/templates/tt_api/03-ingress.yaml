@@ -15,5 +15,4 @@ spec:
             service:
               name: tt-api-service
               port:
-                number: 8081
-                #number: {{.Values.http.ttport}}
+                number: {{.Values.http.ttport}}

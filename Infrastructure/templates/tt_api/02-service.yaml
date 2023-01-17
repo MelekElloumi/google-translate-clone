@@ -8,7 +8,5 @@ spec:
  ports:
  - name: tt-api-port
    protocol: TCP
-   port: 8081
-   targetPort: 8081
-   #port: {{.Values.http.ttport}}
-   #targetPort: {{.Values.http.ttport}}
+   port: {{.Values.http.ttport}}
+   targetPort: {{.Values.http.ttport}}

@@ -15,5 +15,4 @@ spec:
             service:
               name: tts-api-service
               port:
-                number: 8082
-                #number: {{.Values.http.ttport}}
+                number: {{.Values.http.ttsport}}

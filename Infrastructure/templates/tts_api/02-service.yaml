@@ -7,7 +7,5 @@ spec:
   app: tts-api
  ports:
  - name: tts-api-port
-   port: 8082
-   targetPort: 8082
-   #port: {{.Values.http.ttport}}
-   #targetPort: {{.Values.http.ttport}}
+   port: {{.Values.http.ttsport}}
+   targetPort: {{.Values.http.ttsport}}

@@ -1,13 +1,12 @@
 apiVersion: apps/v1
-kind: Deployment # type of resource
+kind: Deployment
 metadata:
   name: tt-api
   labels:
     app: tt-api
     env: production
 spec:
-  #replicas: {{.Values.deployment.replicas}}
-  replicas: 2
+  replicas: {{.Values.replicaCountApi}}
   selector:
     matchLabels:
       app: tt-api
@@ -22,11 +21,9 @@ spec:
     spec:
       containers:
         - name: tt-api
-          image: melekelloumi/text_translation_api:latest
-          #image: {{.Values.image.ttapi}}
+          image: {{.Values.image.ttapi}}
           imagePullPolicy: Always
           resources:
           ports:
-            #- containerPort: {{.Values.http.ttport}}
-            - containerPort: 8081
+            - containerPort: {{.Values.http.ttport}}
       restartPolicy: Always

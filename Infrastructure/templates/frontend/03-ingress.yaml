@@ -15,5 +15,4 @@ spec:
             service:
               name: gtc-frontend-service
               port:
-                number: 3000
-                #number: {{.Values.http.ttport}}
+                number: {{.Values.http.frontendporttarget}}

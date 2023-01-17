@@ -1,13 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment # type of resource
+kind: Deployment 
 metadata:
   name: gtc-frontend
-  labels:
-    app: gtc-frontend
-    env: production
+  labels: {{ toYaml .Values.labels | nindent 4 }}
 spec:
-  #replicas: {{.Values.deployment.replicas}}
-  replicas: 1
+  replicas: {{.Values.replicaCountFront}}
   selector:
     matchLabels:
       app: gtc-frontend
@@ -17,16 +14,14 @@ spec:
         app: gtc-frontend
     spec:
       containers:
-        - name: frontend
-          image: melekelloumi/gtc_frontend:latest
-          #image: {{.Values.image.ttapi}}
+        - name: gtc-frontend
+          image: {{.Values.image.frontend}}
           imagePullPolicy: Always
           resources:
           ports:
-            #- containerPort: {{.Values.http.ttport}}
-            - containerPort: 3000
+            - containerPort: {{.Values.http.frontendporttarget}}
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 3000
+              port: {{.Values.http.frontendporttarget}}
       restartPolicy: Always
