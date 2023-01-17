@@ -23,7 +23,7 @@ const Convert=({options})=>{
 
     useEffect(()=>{
         const doDetection=async()=>{
-            const {data}=await axios.post('http://20.238.253.18/api/detect',{
+            const {data}=await axios.post('http://20.23.138.64/api/detect',{
                     text:debouncedText,
             });
             if(inLang.value!==data.language && debouncedText!==""){
@@ -56,7 +56,7 @@ const Convert=({options})=>{
                 })
           
               })*/
-            const {data}=await axios.post('http://20.238.253.18/api/translate',{
+            const {data}=await axios.post('http://20.23.138.64/api/translate',{
                 text:debouncedText,
                 target:outLang.value,
                 source:inLang.value,

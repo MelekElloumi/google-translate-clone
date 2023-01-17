@@ -11,7 +11,7 @@ function TextToSpeech({ text, language }) {
       /*const response = await fetch("http://127.0.0.1:5000/tts?text=${text}&language=${language}");
       const audioUrl = await response.text();*/
       console.log(text,language);
-      axios.get(`http://20.238.253.18/api2/tts?text=${text}&language=${language}`, {responseType: 'arraybuffer'})
+      axios.get(`http://20.23.138.64/api2/tts?text=${text}&language=${language}`, {responseType: 'arraybuffer'})
       .then(response => {
         const blob = new Blob([response.data], { type: 'audio/mp3' });
         setAudioUrl(URL.createObjectURL(blob));
