@@ -13,6 +13,7 @@ spec:
   template:
     metadata:
       annotations:
+        admission.datadoghq.com/python-lib.version: v1.7.1
         prometheus.io/port: "8081"
         prometheus.io/path: "/metrics"
         prometheus.io/scrape: "true"
@@ -26,4 +27,9 @@ spec:
           resources:
           ports:
             - containerPort: {{.Values.http.ttport}}
+          env:
+            - name: DD_PROFILING_ENABLED
+              value: "true"
+            - name: DD_LOGS_INJECTION
+              value: "true"
       restartPolicy: Always

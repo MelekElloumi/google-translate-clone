@@ -8,3 +8,4 @@ werkzeug
 psutil
 python-json-logger
 flask-request-id-header
+ddtrace
