@@ -10,7 +10,7 @@ COPY . .
 RUN opentelemetry-bootstrap --action=install
 ENV OTEL_EXPORTER_OTLP_ENDPOINT="http://10.0.145.120:4317"
 ENV OTEL_RESOURCE_ATTRIBUTES="TT_APP"
-
+ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION="python"
 
 EXPOSE 8081
 #CMD [ "python", "text_translation.py" ]
