@@ -2,16 +2,6 @@ data "azurerm_resource_group" "RG-dev" {
   name     = "devopsGTC"
 }
 
-# data "terraform_remote_state" "aks" {
-#   backend = "azurerm"
-#   config = {
-#     resource_group_name = "deployment-automation123"
-#     container_name = "backendterraform"
-#     storage_account_name = "backendterraform123"
-#     key = "dev.terraform.tfstate"
-#    }
-# }
-
 resource "azurerm_kubernetes_cluster" "app" {
   name                = "gtcAKS"
   location            = data.azurerm_resource_group.RG-dev.location

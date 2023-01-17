@@ -106,3 +106,8 @@ dist
 # PyCharm files
 .idea
 ChatGPT_DevOps.md
+
+#Terraform
+**/.terraform
+**/.terraform.lock.hcl
+**/terraform.tfvars
