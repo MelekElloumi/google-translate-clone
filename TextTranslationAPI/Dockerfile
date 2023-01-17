@@ -9,4 +9,4 @@ COPY . .
 
 EXPOSE 8081
 #CMD [ "python", "text_translation.py" ]
-CMD ["ddtrace-run", "python", "-m", "text_translation.py"]
+CMD ["ddtrace-run", "python", "-m", "text_translation"]
