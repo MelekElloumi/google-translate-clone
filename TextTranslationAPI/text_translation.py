@@ -12,6 +12,26 @@ import time
 import logging.config
 from flask_request_id_header.middleware import RequestID
 
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import (
+    OTLPMetricExporter,
+)
+from opentelemetry.metrics import (
+    get_meter_provider,
+    set_meter_provider,
+)
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+
+
+exporter = OTLPMetricExporter(insecure=True)
+reader = PeriodicExportingMetricReader(exporter)
+provider = MeterProvider(metric_readers=[reader])
+set_meter_provider(provider)
+
+meter = get_meter_provider().get_meter("sample-flask-app", "0.1.2")
+
+todo_counter = meter.create_up_down_counter("todo_count")
+
 logger = logging.getLogger("Text_Translation_API")
 logging.config.fileConfig('logging.ini', disable_existing_loggers=False)
 
@@ -83,6 +103,7 @@ def create_app(name):
             prom_metrics['translation_english_total'].labels(origin="Source").inc()
         if target=="en":
             prom_metrics['translation_english_total'].labels(origin="Target").inc()
+        todo_counter.add(1)
         prom_metrics['translation_http_requests_total'].labels(endpoint='translate', result='Success').inc()
         after_request("translate")
         # Return the translation in the response

@@ -8,3 +8,7 @@ werkzeug
 psutil
 python-json-logger
 flask-request-id-header
+opentelemetry-api==1.12.0rc1
+opentelemetry-distro==0.31b0
+opentelemetry-instrumentation==0.31b0
+opentelemetry-exporter-otlp==1.12.0rc1
